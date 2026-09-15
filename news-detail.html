@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>公告详情 - 深爱炉实馆</title>
+  <meta name="description" content="深爱炉实馆公告详情。">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%232c2014'/%3E%3Cpath d='M32 10 L54 32 L32 54 L10 32 Z' fill='%23b8862e'/%3E%3Cpath d='M32 22 L42 32 L32 42 L22 32 Z' fill='%23f6f1e6'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ===== 顶部导航栏 ===== -->
+  <header class="顶栏">
+    <div class="容器 顶栏内部">
+      <a class="馆名" href="index.html">深爱<span class="金色字">炉实馆</span></a>
+      <nav class="导航" id="导航">
+        <a href="index.html">首页</a>
+        <a href="about.html">关于我们</a>
+        <a href="news.html" class="当前页">公告</a>
+      </nav>
+      <button class="菜单按钮" onclick="切换菜单()">菜单</button>
+    </div>
+  </header>
+
+  <!-- ===== 公告详情（内容由 js/announcements.js 按网址 ?id= 自动填充） ===== -->
+  <section class="区块">
+    <div class="容器">
+      <p style="margin-bottom:18px;">
+        <a href="news.html" style="color:var(--金色);">← 返回公告列表</a>
+      </p>
+      <article class="详情容器">
+        <h1 class="详情标题" id="公告标题"></h1>
+        <div class="详情日期" id="公告日期"></div>
+        <div class="详情正文" id="公告正文"></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== 页脚 ===== -->
+  <footer class="页脚">
+    <div class="容器 页脚内部">
+      <div>
+        <h4>深爱炉实馆</h4>
+        <p>（一句话品牌介绍，例如：一个以炉会友的卡牌主题空间。）</p>
+      </div>
+      <div>
+        <h4>快速导航</h4>
+        <p><a href="index.html">首页</a></p>
+        <p><a href="about.html">关于我们</a></p>
+        <p><a href="news.html">公告</a></p>
+      </div>
+      <div>
+        <h4>联系方式</h4>
+        <p>地址：（填写你的场馆地址）</p>
+        <p>电话：（填写你的联系电话）</p>
+        <p>邮箱：（填写你的联系邮箱）</p>
+      </div>
+    </div>
+    <div class="版权行">© 2026 深爱炉实馆 · 保留所有权利</div>
+  </footer>
+
+  <!-- 公告数据与渲染逻辑 -->
+  <script src="js/announcements.js"></script>
+  <script>
+    function 切换菜单() {
+      document.getElementById("导航").classList.toggle("展开");
+    }
+  </script>
+</body>
+</html>
