@@ -118,6 +118,7 @@ function 渲染公告详情() {
 
   document.getElementById("公告标题").textContent = 公告.标题;
   document.getElementById("公告日期").textContent = "发布于 " + 公告.日期;
+   document.title = 公告.标题 + " - 公告详情 - 深爱炉实馆";
 
   // 正文渲染：支持图片、居中、右对齐。
   容器.innerHTML = 公告.正文
