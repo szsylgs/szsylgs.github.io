@@ -365,6 +365,33 @@ img { max-width: 100%; display: block; }
   border-radius: var(--圆角);
   box-shadow: var(--阴影);
 }
+/* ===== 9.5 常用网站合集（首页底部） ===== */
+.网站合集 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.网站链接 {
+  display: inline-block;
+  padding: 10px 22px;
+  background: var(--卡片底色);
+  border: 1px solid var(--分割线);
+  border-radius: 999px;
+  font-size: 15px;
+  color: var(--正文色);
+  transition: color 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+
+.网站链接:hover {
+  color: var(--金色);
+  border-color: var(--金色);
+  transform: translateY(-2px);
+  box-shadow: var(--阴影);
+}
+
 
 
 /* ===== 10. 页脚 ===== */
