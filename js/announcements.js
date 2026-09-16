@@ -17,6 +17,20 @@
    下面的"渲染部分"一般不用动。
    ============================================================ */
 
+/* ============================================================
+   ★★ 互动功能配置（评论 / 点赞）：使用前必须填写 ★★
+   ------------------------------------------------------------
+   1. 打开 https://supabase.com 注册并登录，点 New project 创建项目；
+   2. 在项目左侧菜单 Settings → API，找到并复制：
+        - Project URL（形如 https://xxxx.supabase.co）
+        - anon public key（一长串以 eyJ 开头的字符串）
+   3. 把下面两处引号里的内容替换成你自己的；
+   4. 到 SQL Editor 执行《使用说明》里"建表语句"一节的 SQL（必须，否则报错）。
+   不想用互动功能时，保持下面两行原样不动即可，页面会自动隐藏互动区。
+   ============================================================ */
+const SUPABASE_URL = "https://lltbwxfmhwglvjibbsdy.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_CE86zWZRvs-lOXIT9Kz8TA_Yc8-u-ZQ";
+
 /* ================= 公告数据（在这里添加 / 修改公告） ================= */
 const 公告列表 = [
 
@@ -153,6 +167,158 @@ function 渲染公告详情() {
       return "<p>" + 段落 + "</p>";
     })
     .join("");
+   
+   // ===== 互动区：无限制点赞 + 匿名评论（依赖 Supabase 配置） =====
+  渲染互动区(容器, id);
+}
+
+/* ================= 互动区（点赞 + 匿名评论） ================= */
+
+/*
+ * 渲染点赞区和评论区。数据保存在 Supabase 云端，所有访客共享。
+ * 如果上方 SUPABASE_URL 未填写，则不显示互动区（不影响其他功能）。
+ */
+function 渲染互动区(正文容器, 公告id) {
+  // 未配置 Supabase 时直接跳过
+  if (!SUPABASE_URL || SUPABASE_URL.indexOf("你的项目") !== -1) {
+    return;
+  }
+
+  const 客户端 = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // 在公告正文后面插入互动区
+  正文容器.insertAdjacentHTML(
+    "afterend",
+    '<div class="互动区">' +
+      '<div class="点赞区">' +
+        '<button class="点赞按钮" type="button">赞 <span class="赞数">0</span></button>' +
+        '<div class="点赞提示">全局共享点赞，点一次加一，不限次数</div>' +
+      "</div>" +
+      '<div class="评论区">' +
+        "<h3 class='评论标题'>评论</h3>" +
+        '<form class="评论表单">' +
+          '<input class="评论昵称" type="text" maxlength="12" placeholder="昵称（可不填，默认匿名炉友）">' +
+          '<textarea class="评论内容" rows="3" maxlength="500" placeholder="写下你的评论…"></textarea>' +
+          '<button class="评论提交" type="submit">发表评论</button>' +
+        "</form>" +
+        '<div class="评论列表"></div>' +
+      "</div>" +
+    "</div>"
+  );
+
+  const 互动区 = 正文容器.nextElementSibling;
+  const 赞数元素 = 互动区.querySelector(".赞数");
+  const 点赞按钮 = 互动区.querySelector(".点赞按钮");
+  const 评论表单 = 互动区.querySelector(".评论表单");
+  const 评论列表 = 互动区.querySelector(".评论列表");
+  const 昵称输入 = 互动区.querySelector(".评论昵称");
+  const 内容输入 = 互动区.querySelector(".评论内容");
+
+  /* ---- 点赞：读取 / 增加全局计数 ---- */
+  async function 加载点赞数() {
+    const { data, error } = await 客户端
+      .from("announcement_likes")
+      .select("like_count")
+      .eq("announcement_id", 公告id)
+      .maybeSingle();
+    if (data) {
+      赞数元素.textContent = data.like_count;
+    } else if (!error) {
+      // 首次访问：先建一条 0 赞记录
+      await 客户端
+        .from("announcement_likes")
+        .insert({ announcement_id: 公告id, like_count: 0 });
+    }
+  }
+
+  点赞按钮.addEventListener("click", async function () {
+    const { data } = await 客户端
+      .from("announcement_likes")
+      .select("like_count")
+      .eq("announcement_id", 公告id)
+      .maybeSingle();
+    let 当前 = data ? data.like_count : 0;
+    当前 = 当前 + 1;
+    const { error } = await 客户端
+      .from("announcement_likes")
+      .upsert({ announcement_id: 公告id, like_count: 当前 }, { onConflict: "announcement_id" });
+    if (!error) {
+      赞数元素.textContent = 当前;
+    }
+  });
+
+  /* ---- 评论：加载列表 / 提交评论 ---- */
+  function 转义(文本) {
+    return String(文本)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function 格式化时间(时间字符串) {
+    const 时间 = new Date(时间字符串);
+    const 月 = 时间.getMonth() + 1;
+    const 日 = 时间.getDate();
+    const 时 = ("0" + 时间.getHours()).slice(-2);
+    const 分 = ("0" + 时间.getMinutes()).slice(-2);
+    return 月 + "月" + 日 + "日 " + 时 + ":" + 分;
+  }
+
+  async function 加载评论() {
+    const { data, error } = await 客户端
+      .from("announcement_comments")
+      .select("id, nickname, content, created_at")
+      .eq("announcement_id", 公告id)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      评论列表.innerHTML = '<p class="互动提示">评论加载失败，请刷新重试。</p>';
+      return;
+    }
+    if (!data || data.length === 0) {
+      评论列表.innerHTML = '<p class="互动提示">还没有评论，来抢沙发吧。</p>';
+      return;
+    }
+
+    评论列表.innerHTML = data
+      .map(function (评论) {
+        return (
+          '<div class="评论条目">' +
+            '<div class="评论头部">' +
+              '<span class="评论昵称">' + 转义(评论.nickname) + "</span>" +
+              '<span class="评论时间">' + 格式化时间(评论.created_at) + "</span>" +
+            "</div>" +
+            '<div class="评论正文">' + 转义(评论.content) + "</div>" +
+          "</div>"
+        );
+      })
+      .join("");
+  }
+
+  评论表单.addEventListener("submit", async function (事件) {
+    事件.preventDefault();
+    const 昵称 = 昵称输入.value.trim() || "匿名炉友";
+    const 内容 = 内容输入.value.trim();
+    if (!内容) {
+      alert("评论内容不能为空");
+      return;
+    }
+    const { error } = await 客户端.from("announcement_comments").insert({
+      announcement_id: 公告id,
+      nickname: 昵称,
+      content: 内容
+    });
+    if (error) {
+      alert("评论发布失败：" + error.message);
+      return;
+    }
+    内容输入.value = "";
+    加载评论();
+  });
+
+  加载点赞数();
+  加载评论();
 }
 
 /* ================= 页面加载后自动执行 ================= */
