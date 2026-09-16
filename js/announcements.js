@@ -192,7 +192,7 @@ function 渲染互动区(正文容器, 公告id) {
     '<div class="互动区">' +
       '<div class="点赞区">' +
         '<button class="点赞按钮" type="button">赞 <span class="赞数">0</span></button>' +
-        '<div class="点赞提示">全局共享点赞，点一次加一，不限次数</div>' +
+        '<div class="点赞提示">喜欢就疯狂点赞吧</div>' +
       "</div>" +
       '<div class="评论区">' +
         "<h3 class='评论标题'>评论</h3>" +
