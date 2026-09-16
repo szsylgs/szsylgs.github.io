@@ -35,6 +35,15 @@ const SUPABASE_ANON_KEY = "sb_publishable_CE86zWZRvs-lOXIT9Kz8TA_Yc8-u-ZQ";
 const 公告列表 = [
 
    {
+    id: 6,
+    标题: "《分》",
+    日期: "2026-09-16",
+    正文: [
+       "![](images/fen.jpg)",
+       "哈哈哈哈哈哈哈哈哈哈！（一阵爽朗的笑声）"
+    ]
+  },
+   {
     id: 5,
     标题: "老子天下第一",
     日期: "2026-09-16",
