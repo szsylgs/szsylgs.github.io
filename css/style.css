@@ -326,6 +326,133 @@ img { max-width: 100%; display: block; }
 .公告居中 { text-align: center; }
 
 .公告右对齐 { text-align: right; }
+/* ===== 8.5 互动区（点赞 + 评论） ===== */
+.互动区 {
+  margin-top: 36px;
+  padding-top: 26px;
+  border-top: 1px solid var(--分割线);
+}
+
+.点赞区 {
+  text-align: center;
+  margin-bottom: 34px;
+}
+
+.点赞按钮 {
+  display: inline-block;
+  padding: 10px 34px;
+  border: none;
+  border-radius: 999px;
+  background: var(--金色);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.点赞按钮:hover { background: var(--金色亮); transform: translateY(-2px); }
+
+.点赞提示 {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--浅文字);
+}
+
+.评论标题 {
+  font-size: 18px;
+  color: var(--深色);
+  margin-bottom: 14px;
+}
+
+.评论表单 {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.评论昵称,
+.评论内容 {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--分割线);
+  border-radius: var(--圆角);
+  background: var(--主背景);
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--正文色);
+}
+
+.评论昵称:focus,
+.评论内容:focus {
+  outline: none;
+  border-color: var(--金色);
+}
+
+.评论内容 { resize: vertical; }
+
+.评论提交 {
+  align-self: flex-end;
+  padding: 9px 28px;
+  border: none;
+  border-radius: 999px;
+  background: var(--深色);
+  color: #f6f1e6;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.评论提交:hover { background: var(--深色浅); }
+
+.评论列表 {
+  margin-top: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.评论条目 {
+  background: var(--主背景);
+  border-radius: var(--圆角);
+  padding: 16px 18px;
+}
+
+.评论头部 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.评论昵称 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--金色);
+}
+
+.评论时间 {
+  font-size: 12px;
+  color: var(--浅文字);
+}
+
+.评论正文 {
+  font-size: 15px;
+  color: var(--正文色);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.互动提示 {
+  color: var(--浅文字);
+  font-size: 14px;
+  text-align: center;
+  padding: 16px 0;
+}
+
 
 /* ===== 9. 关于我们 ===== */
 .关于段落 {
