@@ -36,11 +36,16 @@
       <h2 class="区块标题">发布新帖</h2>
       <p class="区块副标题">仅文字内容，无需登录，昵称可不填</p>
 
-      <form class="发帖表单" id="发帖表单">
+      <form class="发帖表单" id="发帖表单" onsubmit="return false;">
         <input class="发帖昵称" id="发帖昵称" type="text" maxlength="12" placeholder="昵称（可不填，默认匿名炉友）">
-        <textarea class="发帖内容" id="发帖内容" rows="4" maxlength="1000" placeholder="写点什么…（仅文字）"></textarea>
+        <textarea class="发帖内容" id="发帖内容" rows="4" maxlength="1000" placeholder="写点什么…"></textarea>
+        <label class="图片选择行">
+          <input type="file" id="发帖图片" accept="image/*">
+          <span class="图片选择提示">可添加图片（jpg/png，最大2MB，可不选）</span>
+        </label>
         <button class="发帖提交" type="submit">发布</button>
       </form>
+
 
       <h2 class="区块标题" style="margin-top:52px;">全部帖子</h2>
       <div class="帖子列表" id="帖子列表"></div>
