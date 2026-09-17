@@ -452,6 +452,110 @@ img { max-width: 100%; display: block; }
   text-align: center;
   padding: 16px 0;
 }
+/* ===== 8.6 讨论区（发帖 + 帖子列表） ===== */
+.发帖表单 {
+  max-width: 720px;
+  margin: 32px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--卡片底色);
+  border-radius: var(--圆角);
+  box-shadow: var(--阴影);
+  padding: 24px;
+}
+
+.发帖昵称,
+.发帖内容 {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--分割线);
+  border-radius: var(--圆角);
+  background: var(--主背景);
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--正文色);
+}
+
+.发帖昵称:focus,
+.发帖内容:focus {
+  outline: none;
+  border-color: var(--金色);
+}
+
+.发帖内容 { resize: vertical; }
+
+.发帖提交 {
+  align-self: flex-end;
+  padding: 10px 34px;
+  border: none;
+  border-radius: 999px;
+  background: var(--金色);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.发帖提交:hover { background: var(--金色亮); transform: translateY(-2px); }
+
+.帖子列表 {
+  max-width: 720px;
+  margin: 32px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.帖子卡片 {
+  display: block;
+  background: var(--卡片底色);
+  border-radius: var(--圆角);
+  box-shadow: var(--阴影);
+  padding: 18px 22px;
+  border-left: 4px solid transparent;
+  transition: border-color 0.2s, transform 0.15s;
+}
+
+.帖子卡片:hover {
+  border-left-color: var(--金色);
+  transform: translateX(4px);
+}
+
+.帖子头部 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.帖子昵称 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--金色);
+}
+
+.帖子时间 {
+  font-size: 12px;
+  color: var(--浅文字);
+}
+
+.帖子正文 {
+  font-size: 15.5px;
+  color: var(--正文色);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.帖子箭头 {
+  margin-top: 10px;
+  text-align: right;
+  color: var(--金色);
+  font-size: 15px;
+}
+
 
 
 /* ===== 9. 关于我们 ===== */
