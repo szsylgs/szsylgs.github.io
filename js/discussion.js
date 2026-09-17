@@ -81,6 +81,20 @@ function 渲染帖子列表() {
 
   // 发帖提交
   const 表单 = document.getElementById("发帖表单");
+  const 图片输入 = document.getElementById("发帖图片");
+  const 图片已选 = document.getElementById("图片已选");
+
+  // 选择图片后，在旁边显示文件名
+  if (图片输入 && 图片已选) {
+    图片输入.addEventListener("change", function () {
+      if (图片输入.files && 图片输入.files[0]) {
+        图片已选.textContent = "已选：" + 图片输入.files[0].name;
+      } else {
+        图片已选.textContent = "";
+      }
+    });
+  }
+
   if (表单) {
     表单.addEventListener("submit", async function (事件) {
       事件.preventDefault();
@@ -115,6 +129,7 @@ function 渲染帖子列表() {
       document.getElementById("发帖昵称").value = "";
       document.getElementById("发帖内容").value = "";
        if (文件输入) 文件输入.value = "";
+       if (图片已选) 图片已选.textContent = "";
       加载帖子();
     });
   }
