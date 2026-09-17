@@ -555,6 +555,25 @@ img { max-width: 100%; display: block; }
   color: var(--金色);
   font-size: 15px;
 }
+.帖子图片 {
+  margin-top: 12px;
+  width: 100%;
+  max-width: 420px;
+  border-radius: var(--圆角);
+  box-shadow: var(--阴影);
+}
+
+.图片选择行 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--浅文字);
+}
+
+.图片选择行 input[type="file"] {
+  font-size: 14px;
+}
 
 
 
