@@ -49,7 +49,7 @@ function 渲染帖子列表() {
   async function 加载帖子() {
     const { data, error } = await 客户端
       .from("posts")
-      .select("id, nickname, content, created_at")
+      .select("id, nickname, content, created_at, image_url")
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -71,6 +71,7 @@ function 渲染帖子列表() {
               '<span class="帖子时间">' + 格式化时间(帖子.created_at) + "</span>" +
             "</div>" +
             '<div class="帖子正文">' + 转义文本(摘要) + "</div>" +
+            (帖子.image_url ? '<img class="帖子图片" src="' + 帖子.image_url + '" alt="帖子图片" loading="lazy">' : "") +
             '<div class="帖子箭头">→</div>' +
           "</a>"
         );
@@ -89,9 +90,23 @@ function 渲染帖子列表() {
         alert("帖子内容不能为空");
         return;
       }
+      // 图片上传（可选）
+      const 文件输入 = document.getElementById("发帖图片");
+      const 文件 = 文件输入 ? 文件输入.files[0] : null;
+      let 图片网址 = null;
+      if (文件) {
+        try {
+          图片网址 = await 上传图片(文件, 客户端);
+        } catch (上传错误) {
+          alert(上传错误.message);
+          return;
+        }
+      }
+
       const { error } = await 客户端.from("posts").insert({
         nickname: 昵称,
-        content: 内容
+        content: 内容,
+        image_url: 图片网址
       });
       if (error) {
         alert("发帖失败：" + error.message);
@@ -99,6 +114,7 @@ function 渲染帖子列表() {
       }
       document.getElementById("发帖昵称").value = "";
       document.getElementById("发帖内容").value = "";
+       if (文件输入) 文件输入.value = "";
       加载帖子();
     });
   }
@@ -127,7 +143,7 @@ async function 渲染帖子详情() {
   // 读取帖子内容
   const { data: 帖子, error } = await 客户端
     .from("posts")
-    .select("id, nickname, content, created_at")
+    .select("id, nickname, content, created_at, image_url")
     .eq("id", id)
     .maybeSingle();
 
@@ -138,12 +154,14 @@ async function 渲染帖子详情() {
 
   document.getElementById("帖子标题").textContent = 帖子.nickname + " 的帖子";
   document.title = 帖子.nickname + " 的帖子 - 讨论区 - 深爱炉实馆";
-  容器.innerHTML =
+    容器.innerHTML =
     '<div class="帖子头部">' +
       '<span class="帖子昵称">' + 转义文本(帖子.nickname) + "</span>" +
       '<span class="帖子时间">' + 格式化时间(帖子.created_at) + "</span>" +
     "</div>" +
-    '<div class="帖子正文">' + 转义文本(帖子.content) + "</div>";
+    '<div class="帖子正文">' + 转义文本(帖子.content) + "</div>" +
+    (帖子.image_url ? '<img class="帖子图片" src="' + 帖子.image_url + '" alt="帖子图片">' : "");
+
 
   // 互动区：点赞 + 评论
   渲染互动区(客户端, 容器, id);
@@ -275,6 +293,22 @@ function 转义文本(文本) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
+}
+
+// 上传图片到 Supabase Storage（图片限制 2MB）
+async function 上传图片(文件, 客户端) {
+  const 最大大小 = 2 * 1024 * 1024;
+  if (!文件.type.startsWith("image/")) {
+    throw new Error("只能上传图片文件（jpg / png）");
+  }
+  if (文件.size > 最大大小) {
+    throw new Error("图片不能超过 2MB，请压缩后再传");
+  }
+  const 文件名 = "posts/" + Date.now() + "-" + 文件.name.replace(/[^\w.\-]/g, "_");
+  const { error } = await 客户端.storage.from("post-images").upload(文件名, 文件);
+  if (error) throw error;
+  const { data } = 客户端.storage.from("post-images").getPublicUrl(文件名);
+  return data.publicUrl;
 }
 
 function 格式化时间(时间字符串) {
