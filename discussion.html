@@ -39,10 +39,11 @@
       <form class="发帖表单" id="发帖表单" onsubmit="return false;">
         <input class="发帖昵称" id="发帖昵称" type="text" maxlength="12" placeholder="昵称（可不填，默认匿名炉友）">
         <textarea class="发帖内容" id="发帖内容" rows="4" maxlength="1000" placeholder="写点什么…"></textarea>
-        <label class="图片选择行">
-          <input type="file" id="发帖图片" accept="image/*">
-          <span class="图片选择提示">可添加图片（jpg/png，最大2MB，可不选）</span>
-        </label>
+      <label class="图片选择行">
+          <input type="file" id="发帖图片" accept="image/*" class="图片选择隐藏">
+          <span class="图片选择按钮">选择图片</span>
+      </label>
+
         <button class="发帖提交" type="submit">发布</button>
       </form>
 
