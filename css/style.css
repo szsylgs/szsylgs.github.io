@@ -502,15 +502,22 @@ img { max-width: 100%; display: block; }
 }
 
 .网站链接 {
-  display: inline-block;
-  padding: 10px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 120px;          /* 每行约 4 个汉字宽 */
+  height: 56px;          /* 约两行文字高 */
+  padding: 0 8px;
   background: var(--卡片底色);
   border: 1px solid var(--分割线);
-  border-radius: 999px;
+  border-radius: var(--圆角);
   font-size: 15px;
+  line-height: 1.5;
   color: var(--正文色);
   transition: color 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.2s;
 }
+
 
 .网站链接:hover {
   color: var(--金色);
