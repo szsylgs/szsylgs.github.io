@@ -588,6 +588,14 @@ img { max-width: 100%; display: block; }
 
 .图片选择按钮:hover { background: #2b4da8; }
 
+.图片已选 {
+  font-size: 13px;
+  color: var(--浅文字);
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 
 
