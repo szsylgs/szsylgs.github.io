@@ -110,7 +110,7 @@ function 渲染帖子列表() {
  * 渲染帖子详情：讨论详情页（discussion-detail.html）使用。
  * 根据网址里的 ?id= 找到对应帖子并显示内容 + 点赞 + 评论。
  */
-function 渲染帖子详情() {
+async function 渲染帖子详情() {
   const 容器 = document.getElementById("帖子正文");
   if (!容器) return;
 
